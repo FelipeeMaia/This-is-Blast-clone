@@ -1,16 +1,18 @@
+using Blast.Data;
 using Blast.Pooling;
 using System;
 using UnityEngine;
 
 namespace Blast
 {
-    public class BreakableCube : ColorObject, IPoolable<BreakableCube, BreakableCubeInfo>
+    public class Block : ColorObject, IPoolable<Block>
     {
         [SerializeField] ColorObject _secondCube;
         public int healthPoints { get; private set; }
         public bool isDying => (healthPoints <= 0);
 
-        public Action<BreakableCube> ReturnToPool { get; set; }
+        public Action<Block> ReturnToPool { get; set; }
+        public IData data { get; set; }
 
         public Action<Vector3> OnCubeDestroy;
 
@@ -32,15 +34,18 @@ namespace Blast
             }
         }
 
-        public void OnSpawn(BreakableCubeInfo spawnInfo)
+        public void OnSpawn(IData data)
         {
-            healthPoints = spawnInfo.healthPoints;
-            SetColor(spawnInfo.colorInfo);
+            if (!DataHelper.TryCast<BlockData>(data, out BlockData blockData))
+                return;
+            
+            healthPoints = blockData.healthPoints;
+            SetColor(blockData.colorData);
 
             if (healthPoints == 2)
             {
                 _secondCube.gameObject.SetActive(true);
-                _secondCube.SetColor(spawnInfo.colorInfo);
+                _secondCube.SetColor(blockData.colorData);
             }
         }
     }

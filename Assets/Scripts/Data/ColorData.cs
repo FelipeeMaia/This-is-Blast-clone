@@ -1,12 +1,12 @@
 using UnityEngine;
 
-namespace Blast
+namespace Blast.Data
 {
-    public class ColorInfo : ScriptableObject
+    public class ColorData : ScriptableObject, IData
     {
         public Color color;
         public Material material;
-        public Colors colorName;
+        public Colors myColor;
     }
 
     public enum Colors { Red, Yellow, Orange, Blue, Green, Purple }

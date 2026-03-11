@@ -1,16 +1,17 @@
+using Blast.Data;
 using UnityEngine;
 
 namespace Blast
 {
     public abstract class ColorObject : MonoBehaviour
     {
-        public ColorInfo colorInfo { get; private set; }
+        public ColorData colorData { get; private set; }
         [SerializeField] protected Renderer _renderer;
 
-        public void SetColor(ColorInfo newColorInfo)
+        public void SetColor(ColorData newColorData)
         {
-            colorInfo = newColorInfo;
-            _renderer.material = colorInfo.material;
+            colorData = newColorData;
+            _renderer.material = colorData.material;
         }
     }
 }
