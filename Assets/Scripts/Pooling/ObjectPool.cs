@@ -13,7 +13,7 @@ namespace Blast.Pooling
         private Transform _parent;
         private int _spawnCap;
 
-        public T Spawn(IData spawnData)
+        public T Spawn(ISpawnData spawnData)
         {
             T obj = _availableObjects.Count > 0
                 ? _availableObjects.Dequeue()

@@ -5,10 +5,10 @@ namespace Blast.Pooling
 {
     public interface IPoolable<T>
     {
-        public void OnSpawn(IData spawnData);
+        public void OnSpawn(ISpawnData spawnData);
 
         public Action<T> ReturnToPool { get; set; }
 
-        public IData data { get; set; }
+        public ISpawnData data { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace Blast
         public bool isDying => (healthPoints <= 0);
 
         public Action<Block> ReturnToPool { get; set; }
-        public IData data { get; set; }
+        public ISpawnData data { get; set; }
 
         public Action<Vector3> OnCubeDestroy;
 
@@ -34,13 +34,14 @@ namespace Blast
             }
         }
 
-        public void OnSpawn(IData data)
+        public void OnSpawn(ISpawnData data)
         {
             if (!DataHelper.TryCast<BlockData>(data, out BlockData blockData))
                 return;
             
             healthPoints = blockData.healthPoints;
             SetColor(blockData.colorData);
+            transform.position = blockData.position;
 
             if (healthPoints == 2)
             {

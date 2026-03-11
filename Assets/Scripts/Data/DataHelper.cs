@@ -4,7 +4,7 @@ namespace Blast.Data
 {
     public static class DataHelper
     {
-        public static bool TryCast<T>(IData data, out T typedData) where T : class, IData
+        public static bool TryCast<T>(ISpawnData data, out T typedData) where T : struct, ISpawnData
         {
             if (data is T validData)
             {
@@ -18,7 +18,7 @@ namespace Blast.Data
                     $"Expected {nameof(BlockData)}, " +
                     $"got {data?.GetType().Name ?? "null"}");
 
-                typedData = null;
+                typedData = default(T);
                 return false;
             }
         }

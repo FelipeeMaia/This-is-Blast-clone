@@ -1,14 +1,18 @@
+using UnityEngine;
+
 namespace Blast.Data
 {
-    public class BlockData : IData
+    public struct BlockData : ISpawnData
     {
-        public int healthPoints;
-        public ColorData colorData;
+        public readonly ColorData colorData;
+        public readonly Vector3 position;
+        public readonly int healthPoints;
 
-        public BlockData(int health, ColorData colorInfo)
+        public BlockData(ColorData colorInfo, Vector3 position, int health = 1)
         {
-            this.healthPoints = health;
             this.colorData = colorInfo;
+            this.position = position;
+            this.healthPoints = health;
         }
     }
 }

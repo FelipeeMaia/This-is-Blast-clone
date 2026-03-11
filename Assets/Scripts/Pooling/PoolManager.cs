@@ -1,16 +1,16 @@
 using Blast.Data;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Blast.Pooling
 {
     public class PoolManager : MonoBehaviour
     {
-        [SerializeField] Transform _spawnParent;
         Dictionary<Type, IObjectPool> _pools;
 
-        public void CreatePool<T>(T prefab, int spawnCap)
+        public async Task CreatePool<T>(T prefab, int spawnCap, Transform parent)
             where T : MonoBehaviour, IPoolable<T>
         {
             Type key = typeof(T);
@@ -20,11 +20,11 @@ namespace Blast.Pooling
                 return;
             }
 
-            ObjectPool<T> newPool = new(prefab, spawnCap, _spawnParent);
+            ObjectPool<T> newPool = new(prefab, spawnCap, parent);
             _pools.Add(key, newPool);
         }
 
-        public T Spawn<T>(IData data)
+        public T Spawn<T>(ISpawnData data)
             where T : MonoBehaviour, IPoolable<T>
         {
             Type key = typeof(T);

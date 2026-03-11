@@ -1,6 +1,6 @@
 namespace Blast.Data
 {
-    public interface IData
+    public interface ISpawnData
     {
 
     }
