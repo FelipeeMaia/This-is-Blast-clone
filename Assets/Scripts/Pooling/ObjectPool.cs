@@ -20,6 +20,7 @@ namespace Blast.Pooling
                 : CreateNewObject(addToQueue: false);
 
             _spawnedObjects.Add(obj);
+            obj.ReturnToPool = Despawn;
             obj.gameObject.SetActive(true);
             obj.OnSpawn(spawnData);
 
@@ -30,6 +31,7 @@ namespace Blast.Pooling
         {
             if (!_spawnedObjects.Contains(obj)) return;
 
+            obj.ReturnToPool = null;
             obj.gameObject.SetActive(false);
 
             _spawnedObjects.Remove(obj);
@@ -41,7 +43,6 @@ namespace Blast.Pooling
             T newObject = GameObject.Instantiate(_prefab);
             newObject.transform.parent = _parent;
 
-            newObject.ReturnToPool = Despawn;
             newObject.gameObject.SetActive(false);
 
             if (addToQueue) _availableObjects.Enqueue(newObject);

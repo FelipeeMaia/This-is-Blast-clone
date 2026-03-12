@@ -115,6 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderer: {fileID: 6958227079659520648}
   _secondCube: {fileID: 0}
+  _fallSpeed: 2
 --- !u!23 &6958227079659520648 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -4548453439725232465, guid: 167cdf7ea8974a34cb0c013f1d51c705, type: 3}

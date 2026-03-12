@@ -573,7 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c73ffcd12b7c7a43a74a246bc16a211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rows: 10
+  _rows: 12
   _columns: 10
   _blockSize: 0.75
   _gridOrigin: {x: -3.36, y: -0.9, z: 4.95}
@@ -1592,7 +1592,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 737e54148c16e7345ad8a72c57ca433b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnParent: {fileID: 1249810281}
 --- !u!1 &1281643147
 GameObject:
   m_ObjectHideFlags: 0

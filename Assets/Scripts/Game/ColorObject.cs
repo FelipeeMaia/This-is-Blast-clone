@@ -1,7 +1,7 @@
 using Blast.Data;
 using UnityEngine;
 
-namespace Blast
+namespace Blast.Game
 {
     public abstract class ColorObject : MonoBehaviour
     {
