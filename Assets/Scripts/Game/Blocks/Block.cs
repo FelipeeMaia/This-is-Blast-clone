@@ -20,13 +20,16 @@ namespace Blast.Game.Blocks
         public Action<Block> ReturnToPool { get; set; }
         public Action<Vector3> OnCubeDestroy;
 
-        [ContextMenu("Damage")]
-        public void TakeDamage()
+        [ContextMenu("Destroy Block")]
+        public async void TakeDamage()
         {
             healthPoints--;
 
             if (healthPoints <= 0)
             {
+                _renderer.gameObject.SetActive(false);
+                await Task.Delay(250);
+
                 //triggers and waits dotween animation
                 OnCubeDestroy?.Invoke(transform.position);
                 ReturnToPool?.Invoke(this);
@@ -46,8 +49,8 @@ namespace Blast.Game.Blocks
 
             while (Vector3.Distance(newPosition, targetPosition) > 0.01f)
             {
-                newPosition = Vector3.MoveTowards(newPosition, targetPosition, 
-                                                  _fallSpeed * Time.deltaTime);
+                newPosition = Vector3.MoveTowards
+                    (newPosition, targetPosition, _fallSpeed * Time.deltaTime);
 
                 transform.position = newPosition;
                 await Task.Yield();
@@ -65,6 +68,8 @@ namespace Blast.Game.Blocks
             SetColor(blockData.colorData);
             transform.position = blockData.worldPosition;
             this.data = blockData;
+
+            _renderer.gameObject.SetActive(true);
 
             if (healthPoints == 2)
             {
