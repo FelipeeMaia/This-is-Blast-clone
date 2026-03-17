@@ -14,6 +14,10 @@ namespace Blast.Game.Blocks
         [SerializeField] float _blockSize;
         [SerializeField] Vector3 _gridOrigin;
 
+        [Header("Grid's References")]
+        [SerializeField] Transform _activeParent;
+        [SerializeField] Transform _inactiveParent;
+
         [Header("Block's References")]
         [SerializeField] Block _prefab;
         [SerializeField] ColorData[] _colors;
@@ -29,8 +33,6 @@ namespace Blast.Game.Blocks
                 {
                     BlockData data = CreateRandomBlockData(row, column);
                     Block newBlock = _pool.Spawn<Block>(data);
-
-                    newBlock.ReturnToPool += ColapseColumn;
                     _grid[row, column] = newBlock;
                 }
             }
@@ -38,7 +40,7 @@ namespace Blast.Game.Blocks
 
         private BlockData CreateRandomBlockData(int row, int column)
         {
-            int randomIndex = Random.Range(0, _colors.Length - 1);
+            int randomIndex = Random.Range(0, _colors.Length);
             var randomColor = _colors[randomIndex];
 
             var worldPosition = CalculateBlockPosition(row, column);
@@ -63,10 +65,12 @@ namespace Blast.Game.Blocks
 
             for(int row = 0; row < _rows; row++)
             {
+                //Debug.Log($"Moving the block on the {row}th row");
+
                 if(row == _rows - 1)
                 {
-                    var newNlockData = CreateRandomBlockData(row, column);
-                    _grid[row, column] = _pool.Spawn<Block>(newNlockData);
+                    var newBlockData = CreateRandomBlockData(row, column);
+                    _grid[row, column] = _pool.Spawn<Block>(newBlockData);
                 }
                 else
                 {
@@ -77,6 +81,23 @@ namespace Blast.Game.Blocks
             }
         }
 
+        public bool GetTarget(out Block target, ColorData shooterColor)
+        {
+            for(int column = 0; column < _columns; column++)
+            {
+                var block = _grid[0, column];
+
+                if (block.isTargetable/* && block.colorData == shooterColor*/)
+                {
+                    target = _grid[0, column];
+                    return true;
+                }
+            }
+
+            target = null;
+            return false;
+        }
+
         private void Awake()
         {
             _pool = FindAnyObjectByType<PoolManager>();
@@ -85,8 +106,8 @@ namespace Blast.Game.Blocks
 
         async void Start()
         {
-            int gridSize = _rows * _columns;
-            await _pool.CreatePool<Block>(_prefab, gridSize, transform);
+            int poolSize = (_rows + 1) * _columns;
+            await _pool.CreatePool<Block>(_prefab, poolSize, ColapseColumn, _activeParent, _inactiveParent);
             await SpawnGrid();
         }
 

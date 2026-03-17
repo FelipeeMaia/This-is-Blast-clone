@@ -96,7 +96,6 @@ namespace Blast.Game.Shooter
         {
             _ammoLeft--;
 
-            Debug.Log("Tiro");
             target.TakeDamage();
         }
 

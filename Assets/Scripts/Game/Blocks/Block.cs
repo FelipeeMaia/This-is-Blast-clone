@@ -11,6 +11,9 @@ namespace Blast.Game.Blocks
         [SerializeField] ColorObject _secondCube;
         [SerializeField] float _fallSpeed;
 
+        public int spawnCount = 0;
+        public bool shouldHaveBennDespawned = false;
+
         public int healthPoints { get; private set; }
         public bool isTargetable => (healthPoints > 0 && !_isMoving);
         public ISpawnData data { get; set; }
@@ -31,6 +34,7 @@ namespace Blast.Game.Blocks
                 await Task.Delay(250);
 
                 //triggers and waits dotween animation
+                shouldHaveBennDespawned = true;
                 OnCubeDestroy?.Invoke(transform.position);
                 ReturnToPool?.Invoke(this);
             }
@@ -76,6 +80,9 @@ namespace Blast.Game.Blocks
                 _secondCube.gameObject.SetActive(true);
                 _secondCube.SetColor(blockData.colorData);
             }
+
+            shouldHaveBennDespawned = false;
+            spawnCount++;
         }
     }
 }

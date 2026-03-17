@@ -10,7 +10,8 @@ namespace Blast.Pooling
     {
         Dictionary<Type, IObjectPool> _pools;
 
-        public async Task CreatePool<T>(T prefab, int spawnCap, Transform parent)
+        public async Task CreatePool<T>(T prefab, int spawnCap, Action<T> returnAction, 
+            Transform activeParent, Transform inactiveParent = null) 
             where T : MonoBehaviour, IPoolable<T>
         {
             Type key = typeof(T);
@@ -20,7 +21,7 @@ namespace Blast.Pooling
                 return;
             }
 
-            ObjectPool<T> newPool = new(prefab, spawnCap, parent);
+            ObjectPool<T> newPool = new(prefab, spawnCap, returnAction, activeParent, inactiveParent);
             _pools.Add(key, newPool);
         }
 
