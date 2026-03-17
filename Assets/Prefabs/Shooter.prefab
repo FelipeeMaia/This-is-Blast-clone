@@ -26,11 +26,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d09c88d24b3ceae4f8cecccbf4a657a9, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d09c88d24b3ceae4f8cecccbf4a657a9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d09c88d24b3ceae4f8cecccbf4a657a9, type: 3}
       propertyPath: m_LocalRotation.z
@@ -135,7 +135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 8225815565486827383}
-  _ammoLeft: 30
-  _timeBetweenShots: 50
-  _rotationSpeed: 75
   _moveSpeed: 5
+  _ammoLeft: 30
+  _timeBetweenShots: 250
+  _rotationSpeed: 75
+  _pool: {fileID: 0}

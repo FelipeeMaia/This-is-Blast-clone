@@ -15,7 +15,7 @@ namespace Blast.Data
             else
             {
                 Debug.LogError($"Invalid data type! " +
-                    $"Expected {nameof(BlockData)}, " +
+                    $"Expected {typeof(T).Name}, " +
                     $"got {data?.GetType().Name ?? "null"}");
 
                 typedData = default(T);

@@ -81,21 +81,22 @@ namespace Blast.Game.Blocks
             }
         }
 
-        public bool GetTarget(out Block target, ColorData shooterColor)
+        public Block GetTarget(ColorData shooterColor)
         {
-            for(int column = 0; column < _columns; column++)
+            Block newTarget = null;
+
+            for (int column = 0; column < _columns; column++)
             {
                 var block = _grid[0, column];
 
                 if (block.isTargetable/* && block.colorData == shooterColor*/)
                 {
-                    target = _grid[0, column];
-                    return true;
+                    newTarget = _grid[0, column];
+                    break;
                 }
             }
 
-            target = null;
-            return false;
+            return newTarget;
         }
 
         private void Awake()
@@ -107,7 +108,7 @@ namespace Blast.Game.Blocks
         async void Start()
         {
             int poolSize = (_rows + 1) * _columns;
-            await _pool.CreatePool<Block>(_prefab, poolSize, ColapseColumn, _activeParent, _inactiveParent);
+            await _pool.CreatePool(_prefab, poolSize, ColapseColumn, _activeParent, _inactiveParent);
             await SpawnGrid();
         }
 

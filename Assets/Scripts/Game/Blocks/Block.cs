@@ -6,19 +6,14 @@ using UnityEngine;
 
 namespace Blast.Game.Blocks
 {
-    public class Block : ColorObject, IPoolable<Block>
+    public class Block : GamePiece, IPoolable<Block>
     {
-        [SerializeField] ColorObject _secondCube;
-        [SerializeField] float _fallSpeed;
-
-        public int spawnCount = 0;
-        public bool shouldHaveBennDespawned = false;
+        [SerializeField] GamePiece _secondCube;
 
         public int healthPoints { get; private set; }
-        public bool isTargetable => (healthPoints > 0 && !_isMoving);
+        public bool isTargetable => (healthPoints > 0 && !_isMoving && !_isTargeted);
+        private bool _isTargeted;
         public ISpawnData data { get; set; }
-
-        private bool _isMoving;
 
         public Action<Block> ReturnToPool { get; set; }
         public Action<Vector3> OnCubeDestroy;
@@ -34,7 +29,6 @@ namespace Blast.Game.Blocks
                 await Task.Delay(250);
 
                 //triggers and waits dotween animation
-                shouldHaveBennDespawned = true;
                 OnCubeDestroy?.Invoke(transform.position);
                 ReturnToPool?.Invoke(this);
             }
@@ -46,32 +40,21 @@ namespace Blast.Game.Blocks
             }
         }
 
-        public async Task MoveTo(Vector3 targetPosition)
+        public void Target()
         {
-            Vector3 newPosition = transform.position;
-            _isMoving = true;
-
-            while (Vector3.Distance(newPosition, targetPosition) > 0.01f)
-            {
-                newPosition = Vector3.MoveTowards
-                    (newPosition, targetPosition, _fallSpeed * Time.deltaTime);
-
-                transform.position = newPosition;
-                await Task.Yield();
-            }
-
-            _isMoving = false;
+            _isTargeted = true;
         }
 
         public void OnSpawn(ISpawnData data)
         {
-            if (!DataHelper.TryCast<BlockData>(data, out BlockData blockData))
+            if (!DataHelper.TryCast(data, out BlockData blockData))
                 return;
             
             healthPoints = blockData.healthPoints;
             SetColor(blockData.colorData);
             transform.position = blockData.worldPosition;
             this.data = blockData;
+            _isTargeted = false;
 
             _renderer.gameObject.SetActive(true);
 
@@ -80,9 +63,6 @@ namespace Blast.Game.Blocks
                 _secondCube.gameObject.SetActive(true);
                 _secondCube.SetColor(blockData.colorData);
             }
-
-            shouldHaveBennDespawned = false;
-            spawnCount++;
         }
     }
 }

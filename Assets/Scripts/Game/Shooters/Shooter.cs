@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace Blast.Game.Shooter
 {
-    public class Shooter : ColorObject, IPoolable<Shooter>
+    public class Shooter : GamePiece, IPoolable<Shooter>
     {
         [SerializeField] int _ammoLeft;
         [SerializeField] int _timeBetweenShots;
         [SerializeField] float _rotationSpeed;
-        [SerializeField] float _moveSpeed;
+        [SerializeField] PoolManager _pool;
         private BlockGrid _blockGrid;
 
         public ISpawnData data { get; set; }
@@ -20,7 +20,7 @@ namespace Blast.Game.Shooter
 
         public void OnSpawn(ISpawnData spawnData)
         {
-            if (!DataHelper.TryCast<ShooterData>(data, out ShooterData shooterData))
+            if (!DataHelper.TryCast(data, out ShooterData shooterData))
                 return;
 
             data = shooterData;
@@ -38,12 +38,18 @@ namespace Blast.Game.Shooter
         [ContextMenu("Activate")]
         public async void ActivateShooter()
         {
+            Block target = null;
+
             while (_ammoLeft > 0)
             {
-                if(_blockGrid.GetTarget(out Block newTarget, colorData))
+                target = target is null || !target.isTargetable ?
+                _blockGrid.GetTarget(colorData) : target;
+
+                if (target is not null)
                 {
-                    await LookTo(newTarget.transform);
-                    ShootTarget(newTarget);
+                    target.Target();
+                    await LookTo(target.transform);
+                    ShootTarget(target);
 
                     await Task.Delay(_timeBetweenShots);
                 }
@@ -55,7 +61,7 @@ namespace Blast.Game.Shooter
 
             //DestroyShooter
             gameObject.SetActive(false);
-            //ReturnToPool?.Invoke(this);
+            ReturnToPool?.Invoke(this);
         }
 
         public async Task LookTo(Transform target)
@@ -94,14 +100,10 @@ namespace Blast.Game.Shooter
 
         public void ShootTarget(Block target)
         {
+            BulletData data = new (target, transform.position);
+            var bullet = _pool.Spawn<Bullet>(data);
+
             _ammoLeft--;
-
-            target.TakeDamage();
-        }
-
-        public void MoveTo(Vector3 position)
-        {
-
         }
     }
 }

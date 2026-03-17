@@ -79,8 +79,6 @@ namespace Blast.Pooling
             {
                 CreateNewObject();
             }
-
-
         }
     }
 }

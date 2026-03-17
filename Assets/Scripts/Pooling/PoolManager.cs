@@ -31,7 +31,7 @@ namespace Blast.Pooling
             Type key = typeof(T);
             if (!_pools.TryGetValue(key, out IObjectPool pool))
             {
-                Debug.LogWarning($"No pool found for type {key.Name}.");
+                Debug.LogWarning($"No pool found for type {key.Name}. A new pool was created.");
                 return null;
             }
 
