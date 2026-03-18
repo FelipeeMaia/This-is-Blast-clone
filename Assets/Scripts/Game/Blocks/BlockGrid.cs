@@ -6,10 +6,10 @@ namespace Blast.Game.Blocks
 {
     public class BlockGrid : BaseGrid<Block>
     {
-        protected override ISpawnData CreateRandomSpawnData(int row, int column)
+        protected override ISpawnData CreateRandomSpawnData(int column, int row)
         {
             var randomColor = GetRandomColor();
-            var worldPosition = CalculateGridPosition(row, column);
+            var worldPosition = CalculateGridPosition(column, row);
             var gridPosition = new Vector2(column, row);
 
             BlockData data = new(randomColor, worldPosition, gridPosition);
@@ -22,11 +22,11 @@ namespace Blast.Game.Blocks
 
             for (int column = 0; column < _columns; column++)
             {
-                var block = _grid[0, column];
+                var block = _grid[column, 0];
 
                 if (block.isTargetable/* && block.colorData == shooterColor*/)
                 {
-                    newTarget = _grid[0, column];
+                    newTarget = _grid[column, 0];
                     break;
                 }
             }
@@ -36,7 +36,7 @@ namespace Blast.Game.Blocks
 
         async void Start()
         {
-            int poolSize = (_rows + 1) * _columns;
+            int poolSize = _columns * (_rows + 1);
             await _pool.CreatePool(_prefab, poolSize, _poolParent, ColapseColumn);
             await SpawnGrid();
         }

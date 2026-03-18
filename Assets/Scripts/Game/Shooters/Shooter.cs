@@ -1,30 +1,43 @@
 using Blast.Data;
-using Blast.Game.Blocks;
 using Blast.Interfaces;
-using Blast.Pooling;
+using Blast.Game.Blocks;
+
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Blast.Game.Shooter
 {
-    public class Shooter : GamePiece, IPoolable<Shooter>, IPointerClickHandler
+    public class Shooter : GamePiece, IPoolable<Shooter>, IClickable
     {
-        [SerializeField] int _ammoLeft;
         [SerializeField] int _timeBetweenShots;
         [SerializeField] float _rotationSpeed;
-        [SerializeField] PoolManager _pool;
-        private BlockGrid _blockGrid;
+        [SerializeField] int _ammoLeft;
+
         public ISpawnData data { get; set; }
         public Action<Shooter> OnReturnToPool { get; set; }
+        public Action<Shooter> OnActivate { get; set; }
+        public Action<ISpawnData> OnShoot { get; set; }
+        public Action<int> OnAmmoChange { get; set; }
+        private int AmmoLeft
+        {
+            get { return _ammoLeft; }
+            set
+            {
+                _ammoLeft = value;
+                OnAmmoChange?.Invoke(_ammoLeft);
+            }
 
+        }
+
+        private BlockGrid _blockGrid;
         [ContextMenu("Activate")]
         public async void ActivateShooter()
         {
+            OnActivate?.Invoke(this);
             Block target = null;
 
-            while (_ammoLeft > 0)
+            while (AmmoLeft > 0)
             {
                 target = target is null || !target.isTargetable ?
                 _blockGrid.GetValidTarget(colorData) : target;
@@ -33,7 +46,7 @@ namespace Blast.Game.Shooter
                 {
                     target.Target();
                     await LookTo(target.transform);
-                    ShootTarget(target);
+                    CallShot(target);
 
                     await Task.Delay(_timeBetweenShots);
                 }
@@ -72,12 +85,12 @@ namespace Blast.Game.Shooter
             }
         }
 
-        public void ShootTarget(Block target)
+        public void CallShot(Block target)
         {
-            BulletData data = new(target, target.transform.position, transform.position);
-            var bullet = _pool.Spawn<Bullet>(data);
+            AmmoLeft--;
 
-            _ammoLeft--;
+            BulletData bulletData = new(target, target.transform.position, transform.position);
+            OnShoot?.Invoke(bulletData);
         }
 
         public void OnSpawn(ISpawnData spawnData)
@@ -88,15 +101,15 @@ namespace Blast.Game.Shooter
             data = shooterData;
 
             SetColor(shooterData.colorData);
-            _ammoLeft = shooterData.ammountOfBullets;
+            AmmoLeft = shooterData.ammountOfBullets;
             transform.position = shooterData.spawnPosition;
         }
 
-        public void ReturnToPool() => OnReturnToPool?.Invoke(this);
-
-        public void OnPointerClick(PointerEventData eventData)
+        public void ReturnToPool()
         {
-            Debug.Log($"Clickei no {gameObject.name}!");
+            OnShoot = null;
+            OnActivate = null;
+            OnReturnToPool?.Invoke(this);
         }
 
         private void Start()

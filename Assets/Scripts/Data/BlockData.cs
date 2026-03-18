@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Blast.Data
 {
-    public struct BlockData : ISpawnData, IGridData
+    public struct BlockData : IGridData
     {
         public readonly ColorData colorData;
         public readonly int healthPoints;

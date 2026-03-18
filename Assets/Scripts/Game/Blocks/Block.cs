@@ -30,7 +30,7 @@ namespace Blast.Game.Blocks
 
                 //triggers and waits dotween animation
                 OnCubeDestroy?.Invoke(transform.position);
-                
+                ReturnToPool();
             }
             else
             {

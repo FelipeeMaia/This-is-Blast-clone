@@ -11,6 +11,7 @@ namespace Blast.Game
 
         protected bool _isMoving; 
         [SerializeField] float _moveSpeed;
+        private const int FIXED_TIME = 20;
 
         public virtual void SetColor(ColorData newColorData)
         {
@@ -26,10 +27,10 @@ namespace Blast.Game
             while (Vector3.Distance(newPosition, targetPosition) > 0.01f)
             {
                 newPosition = Vector3.MoveTowards
-                    (newPosition, targetPosition, _moveSpeed * Time.deltaTime);
+                    (newPosition, targetPosition, _moveSpeed * Time.fixedDeltaTime);
 
                 transform.position = newPosition;
-                await Task.Yield();
+                await Task.Delay(FIXED_TIME);
             }
 
             _isMoving = false;

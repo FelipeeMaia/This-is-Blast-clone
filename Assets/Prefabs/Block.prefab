@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 6958227079659520648}
-  _moveSpeed: 5
+  _moveSpeed: 2.5
   _secondCube: {fileID: 0}
 --- !u!23 &6958227079659520648 stripped
 MeshRenderer:

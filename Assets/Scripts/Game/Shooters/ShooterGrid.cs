@@ -11,20 +11,28 @@ namespace Blast.Game.Shooter
         [SerializeField] int _bulletCap;
         [SerializeField] Transform _bulletPoolParent;
 
-        protected override ISpawnData CreateRandomSpawnData(int row, int column)
+        protected override ISpawnData CreateRandomSpawnData(int column, int row)
         {
             var randomColor = GetRandomColor();
-            var worldPosition = CalculateGridPosition(row, column);
+            var worldPosition = CalculateGridPosition(column, row);
             var gridPosition = new Vector2(column, row);
 
             ShooterData data = new(randomColor, worldPosition, gridPosition);
             return data;
         }
 
+        private void ListenToShooter(Shooter shooter)
+        {
+            shooter.OnShoot += bulletData => _pool.Spawn<Bullet>(bulletData);
+            shooter.OnActivate += ColapseColumn;
+        }
+
         async void Start()
         {
+            OnSpawn += ListenToShooter;
+
             int poolSize = (_rows + 1) * _columns;
-            await _pool.CreatePool(_prefab, poolSize, _poolParent, ColapseColumn);
+            await _pool.CreatePool(_prefab, poolSize, _poolParent);
 
             await _pool.CreatePool(_bulletPrefab, _bulletCap, _bulletPoolParent);
 

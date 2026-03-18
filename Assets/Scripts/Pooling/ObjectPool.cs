@@ -56,7 +56,6 @@ namespace Blast.Pooling
             newObject.transform.parent = _inactiveParent;
             newObject.gameObject.SetActive(false);
 
-
             _objectCount++;
             newObject.name += $" ({_objectCount})";
 

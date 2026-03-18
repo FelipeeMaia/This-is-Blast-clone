@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Blast.Data
 {
-    public struct ShooterData : ISpawnData, IGridData
+    public struct ShooterData : IGridData
     { 
         public readonly ColorData colorData;
         public readonly int ammountOfBullets;

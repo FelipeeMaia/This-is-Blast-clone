@@ -1,3 +1,4 @@
+using Blast.Interfaces;
 using System;
 using UnityEngine;
 
@@ -6,9 +7,9 @@ namespace Blast.Game.Shooter
     public class Frontline : MonoBehaviour
     {
         [SerializeField] Transform[] _shooterSlots;
-        Shooter[] _frontShooters;
+        [SerializeField] Shooter[] _frontShooters;
 
-        int _slotsCount;
+        [SerializeField] int _slotsCount;
 
         public void SetSlots(int slotsCount)
         {
@@ -43,6 +44,9 @@ namespace Blast.Game.Shooter
 
         public async void SelectShooter(Shooter selectedShooter)
         {
+            var data = (IGridData)selectedShooter.data;
+            if (data.gridPosition.y != 0) return;
+
             int slotFound = -1;
             for (int i = 0; i < _slotsCount; i++)
             {
@@ -60,6 +64,8 @@ namespace Blast.Game.Shooter
 
             var slotPosition = _shooterSlots[slotFound].position;
             await selectedShooter.MoveTo(slotPosition);
+
+            Debug.Log("Ativando");
             selectedShooter.ActivateShooter();
         }
 
@@ -73,6 +79,26 @@ namespace Blast.Game.Shooter
                     break;
                 }
             }
+        }
+
+        private void CheckClick()
+        {
+            if (!Input.GetMouseButtonDown(0)) return;
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (!hit.transform.TryGetComponent(out IClickable clickable))
+                    return;
+
+                var shooterFound = clickable as Shooter;
+                SelectShooter(shooterFound);
+            }
+        }
+
+        private void Update()
+        {
+            CheckClick();
         }
     }
 }
