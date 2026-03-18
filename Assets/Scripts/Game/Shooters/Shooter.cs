@@ -20,7 +20,7 @@ namespace Blast.Game.Shooter
 
         public void OnSpawn(ISpawnData spawnData)
         {
-            if (!DataHelper.TryCast(data, out ShooterData shooterData))
+            if (!DataHelper.TryCast(spawnData, out ShooterData shooterData))
                 return;
 
             data = shooterData;
@@ -43,7 +43,7 @@ namespace Blast.Game.Shooter
             while (_ammoLeft > 0)
             {
                 target = target is null || !target.isTargetable ?
-                _blockGrid.GetTarget(colorData) : target;
+                _blockGrid.GetValidTarget(colorData) : target;
 
                 if (target is not null)
                 {

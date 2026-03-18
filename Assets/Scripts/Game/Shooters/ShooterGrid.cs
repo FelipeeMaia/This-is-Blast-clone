@@ -1,23 +1,36 @@
-using Blast.Game.Blocks;
-using Blast.Game.Shooter;
-using Blast.Pooling;
+using Blast.Data;
 using UnityEngine;
 
-public class ShooterGrid : MonoBehaviour
+namespace Blast.Game.Shooter
 {
-    private PoolManager _pool;
-    [SerializeField] Bullet _bulletPrefab;
-    [SerializeField] int _bulletCap;
-
-    //[SerializeField] Shooter _shooterPrefab;
-
-    private void Awake()
+    public class ShooterGrid : BaseGrid<Shooter>
     {
-        _pool = FindAnyObjectByType<PoolManager>();
-    }
+        [Header("Bullet Pool")]
+        [SerializeField] Bullet _bulletPrefab;
+        [SerializeField] int _bulletCap;
+        [SerializeField] Transform _activeBulletParent;
+        [SerializeField] Transform _inactiveBulletParent;
 
-    async void Start()
-    {
-        await _pool.CreatePool(_bulletPrefab, _bulletCap, null, transform, transform);
+        protected override ISpawnData CreateRandomSpawnData(int row, int column)
+        {
+            var randomColor = GetRandomColor();
+            var worldPosition = CalculateGridPosition(row, column);
+            var gridPosition = new Vector2(column, row);
+
+            ShooterData data = new(randomColor, worldPosition, gridPosition);
+            return data;
+        }
+
+        async void Start()
+        {
+            int poolSize = (_rows + 1) * _columns;
+            await _pool.CreatePool(_prefab, poolSize, 
+                ColapseColumn, _activeParent, _inactiveParent);
+
+            await _pool.CreatePool(_bulletPrefab, _bulletCap, 
+                null, _activeBulletParent, _inactiveBulletParent);
+
+            await SpawnGrid();
+        }
     }
 }
