@@ -1,3 +1,4 @@
+using Blast.Interfaces;
 using UnityEngine;
 
 namespace Blast.Data

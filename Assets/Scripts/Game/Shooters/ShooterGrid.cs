@@ -1,4 +1,5 @@
 using Blast.Data;
+using Blast.Interfaces;
 using UnityEngine;
 
 namespace Blast.Game.Shooter
@@ -8,8 +9,7 @@ namespace Blast.Game.Shooter
         [Header("Bullet Pool")]
         [SerializeField] Bullet _bulletPrefab;
         [SerializeField] int _bulletCap;
-        [SerializeField] Transform _activeBulletParent;
-        [SerializeField] Transform _inactiveBulletParent;
+        [SerializeField] Transform _bulletPoolParent;
 
         protected override ISpawnData CreateRandomSpawnData(int row, int column)
         {
@@ -24,11 +24,9 @@ namespace Blast.Game.Shooter
         async void Start()
         {
             int poolSize = (_rows + 1) * _columns;
-            await _pool.CreatePool(_prefab, poolSize, 
-                ColapseColumn, _activeParent, _inactiveParent);
+            await _pool.CreatePool(_prefab, poolSize, _poolParent, ColapseColumn);
 
-            await _pool.CreatePool(_bulletPrefab, _bulletCap, 
-                null, _activeBulletParent, _inactiveBulletParent);
+            await _pool.CreatePool(_bulletPrefab, _bulletCap, _bulletPoolParent);
 
             await SpawnGrid();
         }

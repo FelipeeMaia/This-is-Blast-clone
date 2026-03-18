@@ -1,4 +1,5 @@
 using Blast.Data;
+using Blast.Interfaces;
 using Blast.Pooling;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -14,13 +15,10 @@ namespace Blast.Game
         [SerializeField] protected Vector3 _gridOrigin;
         [SerializeField] protected int _rowDirection = 1;
 
-        [Header("Grid's References")]
-        [SerializeField] protected Transform _activeParent;
-        [SerializeField] protected Transform _inactiveParent;
-
-        [Header("Block's References")]
+        [Header("Pool's References")]
         [SerializeField] protected T _prefab;
         [SerializeField] protected ColorData[] _colors;
+        [SerializeField] protected Transform _poolParent;
 
         protected T[,] _grid;
         protected PoolManager _pool;

@@ -1,3 +1,4 @@
+using Blast.Interfaces;
 using UnityEngine;
 
 namespace Blast.Data
@@ -17,6 +18,5 @@ namespace Blast.Data
             this.gridPosition = gridPosition;
             this.healthPoints = healthPoints;
         }
-
     }
 }

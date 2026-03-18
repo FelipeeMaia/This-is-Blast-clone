@@ -1,13 +1,13 @@
-using Blast.Data;
 using System;
 
-namespace Blast.Pooling
+namespace Blast.Interfaces
 {
     public interface IPoolable<T>
     {
         public void OnSpawn(ISpawnData spawnData);
+        public void ReturnToPool();
 
-        public Action<T> ReturnToPool { get; set; }
+        public Action<T> OnReturnToPool { get; set; }
 
         public ISpawnData data { get; set; }
     }

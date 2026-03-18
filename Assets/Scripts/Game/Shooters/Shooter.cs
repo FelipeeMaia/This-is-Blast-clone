@@ -1,39 +1,23 @@
 using Blast.Data;
 using Blast.Game.Blocks;
+using Blast.Interfaces;
 using Blast.Pooling;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Blast.Game.Shooter
 {
-    public class Shooter : GamePiece, IPoolable<Shooter>
+    public class Shooter : GamePiece, IPoolable<Shooter>, IPointerClickHandler
     {
         [SerializeField] int _ammoLeft;
         [SerializeField] int _timeBetweenShots;
         [SerializeField] float _rotationSpeed;
         [SerializeField] PoolManager _pool;
         private BlockGrid _blockGrid;
-
         public ISpawnData data { get; set; }
-        public Action<Shooter> ReturnToPool { get; set; }
-
-        public void OnSpawn(ISpawnData spawnData)
-        {
-            if (!DataHelper.TryCast(spawnData, out ShooterData shooterData))
-                return;
-
-            data = shooterData;
-
-            SetColor(shooterData.colorData);
-            _ammoLeft = shooterData.ammountOfBullets;
-            transform.position = shooterData.spawnPosition;
-        }
-
-        private void Start()
-        {
-            _blockGrid = FindAnyObjectByType<BlockGrid>();
-        }
+        public Action<Shooter> OnReturnToPool { get; set; }
 
         [ContextMenu("Activate")]
         public async void ActivateShooter()
@@ -59,9 +43,7 @@ namespace Blast.Game.Shooter
                 }
             }
 
-            //DestroyShooter
-            gameObject.SetActive(false);
-            ReturnToPool?.Invoke(this);
+            ReturnToPool();
         }
 
         public async Task LookTo(Transform target)
@@ -71,19 +53,11 @@ namespace Blast.Game.Shooter
 
             if (direction == Vector3.zero) return;
 
-            //var targetRotation = Quaternion.LookRotation(direction);
             float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             float angleDifference = 999f;
             while (angleDifference > 0.5f)
             {
-                /*transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation,
-                    targetRotation,
-                    _rotationSpeed * Time.deltaTime
-                );*/
-
-                //angle = Quaternion.Angle(transform.rotation, targetRotation);
                 float currentAngle = transform.eulerAngles.z;
 
                 float newAngle = Mathf.MoveTowardsAngle(
@@ -100,10 +74,34 @@ namespace Blast.Game.Shooter
 
         public void ShootTarget(Block target)
         {
-            BulletData data = new (target, transform.position);
+            BulletData data = new(target, target.transform.position, transform.position);
             var bullet = _pool.Spawn<Bullet>(data);
 
             _ammoLeft--;
+        }
+
+        public void OnSpawn(ISpawnData spawnData)
+        {
+            if (!DataHelper.TryCast(spawnData, out ShooterData shooterData))
+                return;
+
+            data = shooterData;
+
+            SetColor(shooterData.colorData);
+            _ammoLeft = shooterData.ammountOfBullets;
+            transform.position = shooterData.spawnPosition;
+        }
+
+        public void ReturnToPool() => OnReturnToPool?.Invoke(this);
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Debug.Log($"Clickei no {gameObject.name}!");
+        }
+
+        private void Start()
+        {
+            _blockGrid = FindAnyObjectByType<BlockGrid>();
         }
     }
 }

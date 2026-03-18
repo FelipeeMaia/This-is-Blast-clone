@@ -1,4 +1,5 @@
 using Blast.Data;
+using Blast.Interfaces;
 using UnityEngine;
 
 namespace Blast.Game.Blocks
@@ -36,7 +37,7 @@ namespace Blast.Game.Blocks
         async void Start()
         {
             int poolSize = (_rows + 1) * _columns;
-            await _pool.CreatePool(_prefab, poolSize, ColapseColumn, _activeParent, _inactiveParent);
+            await _pool.CreatePool(_prefab, poolSize, _poolParent, ColapseColumn);
             await SpawnGrid();
         }
 

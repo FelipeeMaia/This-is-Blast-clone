@@ -1,12 +1,12 @@
 using Blast.Data;
-using Blast.Pooling;
+using Blast.Interfaces;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Blast.Game.Blocks
 {
-    public class Block : GamePiece, IPoolable<Block>
+    public class Block : GamePiece, IPoolable<Block>, IDamageble
     {
         [SerializeField] GamePiece _secondCube;
 
@@ -15,11 +15,11 @@ namespace Blast.Game.Blocks
         private bool _isTargeted;
         public ISpawnData data { get; set; }
 
-        public Action<Block> ReturnToPool { get; set; }
+        public Action<Block> OnReturnToPool { get; set; }
         public Action<Vector3> OnCubeDestroy;
 
         [ContextMenu("Destroy Block")]
-        public async void TakeDamage()
+        public async void Damage()
         {
             healthPoints--;
 
@@ -30,7 +30,7 @@ namespace Blast.Game.Blocks
 
                 //triggers and waits dotween animation
                 OnCubeDestroy?.Invoke(transform.position);
-                ReturnToPool?.Invoke(this);
+                
             }
             else
             {
@@ -64,5 +64,7 @@ namespace Blast.Game.Blocks
                 _secondCube.SetColor(blockData.colorData);
             }
         }
+
+        public void ReturnToPool() => OnReturnToPool?.Invoke(this);
     }
 }

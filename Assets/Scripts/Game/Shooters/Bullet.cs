@@ -1,6 +1,5 @@
 using Blast.Data;
-using Blast.Game.Blocks;
-using Blast.Pooling;
+using Blast.Interfaces;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -9,10 +8,11 @@ namespace Blast.Game.Shooter
 {
     public class Bullet : GamePiece, IPoolable<Bullet>
     {
-        public Action<Bullet> ReturnToPool { get; set; }
+        public Action<Bullet> OnReturnToPool { get; set; }
         public ISpawnData data { get; set; }
 
-        private Block _myTarget;
+        private IDamageble _myTarget;
+        private Vector3 _targetPosition;
 
         public async void OnSpawn(ISpawnData spawnData)
         {
@@ -20,14 +20,18 @@ namespace Blast.Game.Shooter
                 return;
 
             data = bulletData;
+
             _myTarget = bulletData.target;
+            _targetPosition = bulletData.targetPosition;
             transform.position = bulletData.spawnPosition;
 
-            await MoveTo(_myTarget.transform.position);
+            await MoveTo(_targetPosition);
 
-            _myTarget.TakeDamage();
-            ReturnToPool?.Invoke(this);
+            _myTarget.Damage();
+            ReturnToPool();
         }
+
+        public void ReturnToPool() => OnReturnToPool?.Invoke(this);
 
         public override async Task MoveTo(Vector3 targetPosition)
         {

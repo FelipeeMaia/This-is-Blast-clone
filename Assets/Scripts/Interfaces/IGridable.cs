@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Blast.Data
+namespace Blast.Interfaces
 {
     public interface IGridData
     {

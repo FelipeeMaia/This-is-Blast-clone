@@ -1,4 +1,4 @@
-namespace Blast.Pooling
+namespace Blast.Interfaces
 {
     public interface IObjectPool 
     { 

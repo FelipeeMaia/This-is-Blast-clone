@@ -1,4 +1,4 @@
-namespace Blast.Data
+namespace Blast.Interfaces
 {
     public interface ISpawnData
     {

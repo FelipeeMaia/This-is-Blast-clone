@@ -1,4 +1,4 @@
-using Blast.Data;
+using Blast.Interfaces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,7 +27,10 @@ namespace Blast.Pooling
             obj.transform.parent = _activeParent;
 
             _spawnedObjects.Add(obj);
-            
+
+            obj.OnReturnToPool += Despawn;
+            obj.OnReturnToPool += _returnAction;
+
             obj.gameObject.SetActive(true);
             obj.OnSpawn(spawnData);
 
@@ -41,6 +44,8 @@ namespace Blast.Pooling
             obj.gameObject.SetActive(false);
             obj.transform.parent = _inactiveParent;
 
+            obj.OnReturnToPool = null;
+
             _spawnedObjects.Remove(obj);
             _availableObjects.Enqueue(obj);
         }
@@ -51,8 +56,6 @@ namespace Blast.Pooling
             newObject.transform.parent = _inactiveParent;
             newObject.gameObject.SetActive(false);
 
-            newObject.ReturnToPool += _returnAction;
-            newObject.ReturnToPool += Despawn;
 
             _objectCount++;
             newObject.name += $" ({_objectCount})";
@@ -62,14 +65,23 @@ namespace Blast.Pooling
             return newObject;
         }
 
-        public ObjectPool(T prefab, int spawnCap, Action<T> returnAction, Transform activeParent, Transform inactiveParent)
+        private Transform CreateParent(string prefix, T prefab, Transform parent)
+        {
+            var newParent = new GameObject($"{prefix} - {prefab.name}s").transform;
+            newParent.position = Vector3.zero;
+            newParent.parent = parent;
+
+            return newParent;
+        }
+
+        public ObjectPool(T prefab, int spawnCap,Transform parent, Action<T> returnAction = null)
         {
             _prefab = prefab;
             _initialCap = spawnCap;
             _returnAction = returnAction;
 
-            _activeParent = activeParent;
-            _inactiveParent = inactiveParent is not null ? inactiveParent : activeParent;
+            _activeParent = CreateParent("Active", prefab, parent);
+            _inactiveParent = CreateParent("Inactive", prefab, parent);
 
             _availableObjects = new Queue<T>();
             _spawnedObjects = new List<T>();
