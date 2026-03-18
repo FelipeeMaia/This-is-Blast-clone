@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1510638408996744062}
   - component: {fileID: 4974570255232267405}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: AmmoCounter(TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 6301105519104940836}
   - component: {fileID: 754370740120544367}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

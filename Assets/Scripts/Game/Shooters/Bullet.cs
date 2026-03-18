@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Blast.Game.Shooter
+namespace Blast.Game.Shooters
 {
     public class Bullet : GamePiece, IPoolable<Bullet>
     {

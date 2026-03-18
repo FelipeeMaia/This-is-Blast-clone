@@ -1,9 +1,10 @@
+using Blast.Game.Shooters;
 using TMPro;
 using UnityEngine;
 
-namespace Blast.Game.Shooter.HUD
+namespace Blast.Game.HUD
 {
-    public class BulletHUD : MonoBehaviour
+    public class AmmoHUD : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] Shooter _myShooter;

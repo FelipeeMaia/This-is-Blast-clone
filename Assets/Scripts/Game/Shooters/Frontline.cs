@@ -2,7 +2,7 @@ using Blast.Interfaces;
 using System;
 using UnityEngine;
 
-namespace Blast.Game.Shooter
+namespace Blast.Game.Shooters
 {
     public class Frontline : MonoBehaviour
     {

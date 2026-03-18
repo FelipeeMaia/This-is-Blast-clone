@@ -1,0 +1,17 @@
+{
+    "name": "Blast.Pool",
+    "rootNamespace": "Blast.Pool",
+    "references": [
+        "GUID:5c41e9662b5bb784fbe1bbb97b8e3af1",
+        "GUID:7461ea4a28203fd489f85ca7ba837e8b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

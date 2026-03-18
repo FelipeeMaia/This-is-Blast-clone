@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Blast.Game.Shooter
+namespace Blast.Game.Shooters
 {
     public class Shooter : GamePiece, IPoolable<Shooter>, IClickable
     {

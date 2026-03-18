@@ -2,7 +2,7 @@ using Blast.Data;
 using Blast.Interfaces;
 using UnityEngine;
 
-namespace Blast.Game.Shooter
+namespace Blast.Game.Shooters
 {
     public class ShooterGrid : BaseGrid<Shooter>
     {

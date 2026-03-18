@@ -1,0 +1,16 @@
+{
+    "name": "Blast.Data",
+    "rootNamespace": "Blast.Data",
+    "references": [
+        "GUID:7461ea4a28203fd489f85ca7ba837e8b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

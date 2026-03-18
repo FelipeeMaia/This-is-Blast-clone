@@ -1,0 +1,18 @@
+{
+    "name": "Blast.Game",
+    "rootNamespace": "Blast.Game",
+    "references": [
+        "GUID:7461ea4a28203fd489f85ca7ba837e8b",
+        "GUID:5c41e9662b5bb784fbe1bbb97b8e3af1",
+        "GUID:917bee715d26a274ab229e3c309a293b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

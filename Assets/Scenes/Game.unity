@@ -875,11 +875,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shooterSlots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 226900908}
+  - {fileID: 474692328}
+  - {fileID: 101222116}
+  - {fileID: 1962497940}
+  - {fileID: 1374164620}
   _frontShooters:
   - {fileID: 0}
   - {fileID: 0}
