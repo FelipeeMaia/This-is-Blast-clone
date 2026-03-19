@@ -8,6 +8,10 @@ using Random = UnityEngine.Random;
 
 namespace Blast.Game
 {
+    /// <summary>
+    /// A blueprint for the grids on the game, deals with organization and spawning from object pools.
+    /// </summary>
+    /// <typeparam name="T">The class that will be organized in a grid.</typeparam>
     public abstract class BaseGrid<T> : MonoBehaviour where T : GamePiece, IPoolable<T>
     {
         [Header("Grid's Stats")]

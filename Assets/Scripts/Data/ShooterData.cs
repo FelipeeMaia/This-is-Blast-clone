@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Blast.Data
 {
+    /// <summary>
+    /// Struct that transports the SpawnData needed by Shooters.
+    /// </summary>
     public struct ShooterData : IGridData
     { 
         public readonly ColorData colorData;

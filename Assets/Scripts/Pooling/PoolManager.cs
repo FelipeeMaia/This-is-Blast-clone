@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Blast.Pooling
 {
+    /// <summary>
+    /// Class responsible to manage all the ObjectPools, and through which all calls to them are made.
+    /// </summary>
     public class PoolManager : MonoBehaviour
     {
         Dictionary<Type, IObjectPool> _pools;

@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Blast.Game.Shooters
 {
+    /// <summary>
+    /// Class reponsible for managing the Grid of Shooters in the game.
+    /// </summary>
     public class ShooterGrid : BaseGrid<Shooter>
     {
         [Header("Bullet Pool")]

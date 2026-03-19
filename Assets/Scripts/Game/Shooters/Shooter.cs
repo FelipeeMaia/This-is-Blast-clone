@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace Blast.Game.Shooters
 {
+    /// <summary>
+    /// Class responsible for the shooter behaviour.
+    /// </summary>
     public class Shooter : GamePiece, IPoolable<Shooter>, IClickable
     {
         [SerializeField] int _timeBetweenShots;

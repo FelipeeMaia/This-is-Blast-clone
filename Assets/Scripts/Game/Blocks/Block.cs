@@ -6,7 +6,10 @@ using UnityEngine;
 
 namespace Blast.Game.Blocks
 {
-    public class Block : GamePiece, IPoolable<Block>, IDamageble
+    /// <summary>
+    /// Class responsible for the blocks behaviour.
+    /// </summary>
+    public class Block : GamePiece, IPoolable<Block>, IDamageable
     {
         [SerializeField] GamePiece _secondCube;
 

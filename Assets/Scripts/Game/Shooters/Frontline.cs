@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Blast.Game.Shooters
 {
+    /// <summary>
+    /// Class that controls the shooter's frontline, available slots and shooter selection.
+    /// </summary>
     public class Frontline : MonoBehaviour
     {
         [SerializeField] Transform[] _shooterSlots;

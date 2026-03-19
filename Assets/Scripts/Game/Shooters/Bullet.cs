@@ -6,12 +6,15 @@ using UnityEngine;
 
 namespace Blast.Game.Shooters
 {
+    /// <summary>
+    /// Class responsible for the Bullet behaviour.
+    /// </summary>
     public class Bullet : GamePiece, IPoolable<Bullet>
     {
         public Action<Bullet> OnReturnToPool { get; set; }
         public ISpawnData data { get; set; }
 
-        private IDamageble _myTarget;
+        private IDamageable _myTarget;
         private Vector3 _targetPosition;
 
         public async void OnSpawn(ISpawnData spawnData)

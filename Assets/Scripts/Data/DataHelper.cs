@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Blast.Data
 {
+    /// <summary>
+    /// Helper class with functions to deal with data.
+    /// </summary>
     public static class DataHelper
     {
         public static bool TryCast<T>(ISpawnData data, out T typedData) where T : struct, ISpawnData

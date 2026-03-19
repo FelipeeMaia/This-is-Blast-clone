@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Blast.Game.HUD
 {
+    /// <summary>
+    /// Class responsible for showing on the shooter how many ammo it has left.
+    /// </summary>
     public class AmmoHUD : MonoBehaviour
     {
         [Header("References")]

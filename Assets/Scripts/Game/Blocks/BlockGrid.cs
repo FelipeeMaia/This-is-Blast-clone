@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Blast.Game.Blocks
 {
+    /// <summary>
+    /// Class reponsible for managing the Grid of Blocks in the game.
+    /// </summary>
     public class BlockGrid : BaseGrid<Block>
     {
         protected override ISpawnData CreateRandomSpawnData(int column, int row)

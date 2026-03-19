@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Blast.Game
 {
+    /// <summary>
+    /// Blueprint for the movable pieces in the game.
+    /// </summary>
     public abstract class GamePiece : MonoBehaviour
     {
         public ColorData colorData { get; private set; }

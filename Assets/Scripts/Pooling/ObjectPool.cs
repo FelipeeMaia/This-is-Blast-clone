@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace Blast.Pooling
 {
+    /// <summary>
+    /// Class that reprensents a pool of objects.
+    /// </summary>
+    /// <typeparam name="T">The Type of object that the pool is made of.</typeparam>
     public class ObjectPool<T> : IObjectPool where T : MonoBehaviour, IPoolable<T>
     {
         private Queue<T> _availableObjects;

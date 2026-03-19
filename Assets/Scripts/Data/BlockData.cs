@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Blast.Data
 {
+    /// <summary>
+    /// Struct that transports the SpawnData needed by Blocks.
+    /// </summary>
     public struct BlockData : IGridData
     {
         public readonly ColorData colorData;
