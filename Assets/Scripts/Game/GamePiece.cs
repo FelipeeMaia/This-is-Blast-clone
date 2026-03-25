@@ -9,6 +9,7 @@ namespace Blast.Game
     /// </summary>
     public abstract class GamePiece : MonoBehaviour
     {
+        [Header("Piece Stats")]
         public ColorData colorData { get; private set; }
         [SerializeField] protected Renderer _renderer;
 
@@ -22,12 +23,12 @@ namespace Blast.Game
             _renderer.material = colorData.material;
         }
 
-        public virtual async Task MoveTo(Vector3 targetPosition)
+        public virtual async Task MoveTo(Vector3 targetPosition, float distanceToGoal = 0.01f)
         {
             Vector3 newPosition = transform.position;
             _isMoving = true;
 
-            while (Vector3.Distance(newPosition, targetPosition) > 0.01f)
+            while (Vector3.Distance(newPosition, targetPosition) > distanceToGoal)
             {
                 newPosition = Vector3.MoveTowards
                     (newPosition, targetPosition, _moveSpeed * Time.fixedDeltaTime);

@@ -16,6 +16,7 @@ namespace Blast.Game.Shooters
 
         private IDamageable _myTarget;
         private Vector3 _targetPosition;
+        [SerializeField] float _distanceToHit;
 
         public async void OnSpawn(ISpawnData spawnData)
         {
@@ -30,15 +31,15 @@ namespace Blast.Game.Shooters
 
             await MoveTo(_targetPosition);
 
-            _myTarget.Damage();
+            _myTarget.Hit(transform.position);
             ReturnToPool();
         }
 
         public void ReturnToPool() => OnReturnToPool?.Invoke(this);
 
-        public override async Task MoveTo(Vector3 targetPosition)
+        public override async Task MoveTo(Vector3 targetPosition, float distanceToGoal = 0.01f)
         {
-            await base.MoveTo(targetPosition);
+            await base.MoveTo(targetPosition, _distanceToHit);
         }
     }
 }

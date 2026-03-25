@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Blast.Interfaces
 {
     /// <summary>
@@ -5,6 +7,6 @@ namespace Blast.Interfaces
     /// </summary>
     public interface IDamageable
     {
-        public void Damage();
+        public void Hit(Vector3 hitPoint);
     }
 }

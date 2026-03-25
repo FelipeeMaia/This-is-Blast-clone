@@ -98,7 +98,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 6214088317925248766}
-  _moveSpeed: 7.5
+  _moveSpeed: 15
+  _distanceToHit: 0.25
 --- !u!23 &6214088317925248766 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 8963271617696026616, guid: 5faad7cbc26b56047a94b4ea1bd2c069, type: 3}

@@ -114,8 +114,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 6958227079659520648}
-  _moveSpeed: 2.5
+  _moveSpeed: 8
   _secondCube: {fileID: 0}
+  _positionTest: {x: 0, y: -1, z: 0}
+  _punchStrength: 0.5
+  _punchDuration: 0.2
+  _shrinkDuration: 0.15
 --- !u!23 &6958227079659520648 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -4548453439725232465, guid: 167cdf7ea8974a34cb0c013f1d51c705, type: 3}

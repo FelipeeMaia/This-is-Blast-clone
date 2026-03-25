@@ -68,7 +68,6 @@ namespace Blast.Game.Shooters
             var slotPosition = _shooterSlots[slotFound].position;
             await selectedShooter.MoveTo(slotPosition);
 
-            Debug.Log("Ativando");
             selectedShooter.ActivateShooter();
         }
 

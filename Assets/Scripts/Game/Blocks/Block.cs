@@ -1,8 +1,9 @@
 using Blast.Data;
 using Blast.Interfaces;
+using Blast.Core;
 using System;
-using System.Threading.Tasks;
 using UnityEngine;
+using System.Threading.Tasks;
 
 namespace Blast.Game.Blocks
 {
@@ -21,26 +22,34 @@ namespace Blast.Game.Blocks
         public Action<Block> OnReturnToPool { get; set; }
         public Action<Vector3> OnCubeDestroy;
 
-        [ContextMenu("Destroy Block")]
-        public async void Damage()
+        [Header("Punch Effect")]
+        [SerializeField] float _punchStrength;
+        [SerializeField] float _punchDuration;
+
+        [Header("Shrink Effect")]
+        [SerializeField] float _shrinkDuration;
+
+        public async void Hit(Vector3 hitPoint)
         {
             healthPoints--;
 
             if (healthPoints <= 0)
             {
-                _renderer.gameObject.SetActive(false);
-                await Task.Delay(250);
-
-                //triggers and waits dotween animation
-                OnCubeDestroy?.Invoke(transform.position);
+                await HitBlock(transform, hitPoint);
                 ReturnToPool();
             }
             else
             {
-                //triggers and waits dotween animation
-                OnCubeDestroy?.Invoke(_secondCube.transform.position);
+                await HitBlock(_secondCube.transform, hitPoint);
                 _secondCube.gameObject.SetActive(false);
             }
+        }
+
+        private async Task HitBlock(Transform target, Vector3 hitPoint)
+        {
+            await target.PunchEffect(hitPoint, _punchStrength, _punchDuration);
+            await target.ShrinkOut(_shrinkDuration);
+            OnCubeDestroy?.Invoke(target.position);
         }
 
         public void Target()
@@ -59,10 +68,12 @@ namespace Blast.Game.Blocks
             this.data = blockData;
             _isTargeted = false;
 
+            transform.localScale = Vector3.one;
             _renderer.gameObject.SetActive(true);
 
-            if (healthPoints == 2)
+            if (healthPoints > 1)
             {
+                _secondCube.transform.localScale = Vector3.one;
                 _secondCube.gameObject.SetActive(true);
                 _secondCube.SetColor(blockData.colorData);
             }

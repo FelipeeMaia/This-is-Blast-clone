@@ -395,8 +395,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderer: {fileID: 8225815565486827383}
   _moveSpeed: 10
-  _timeBetweenShots: 250
-  _rotationSpeed: 75
+  _timeBetweenShots: 50
+  _rotationSpeed: 150
   _ammoLeft: 30
 --- !u!65 &7799995150437221700
 BoxCollider:
