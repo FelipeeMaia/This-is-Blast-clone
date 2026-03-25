@@ -6,7 +6,7 @@ namespace Blast.Core
 {
     public static class TweenHelper
     {
-        public static async Task PunchEffect(this Transform target, Vector3 impactPoint, float strength, float duration)
+        public static async Task DoPunchEffect(this Transform target, Vector3 impactPoint, float strength, float duration)
         {
             Vector3 hitDirection = impactPoint - target.position;
             hitDirection.z = 0f;    
@@ -22,7 +22,7 @@ namespace Blast.Core
             await punchSequence.AwaitCompletion();
         }
 
-        public static async Task ShrinkOut(this Transform target, float duration)
+        public static async Task DoShrinkOut(this Transform target, float duration)
         {
             float popDuration = duration / 3;
             float shrinkDuration = popDuration * 2;
@@ -34,7 +34,6 @@ namespace Blast.Core
 
             await sequence.AwaitCompletion();
         }
-
 
         private static Task AwaitCompletion(this Tween tween)
         {

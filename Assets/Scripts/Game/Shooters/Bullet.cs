@@ -1,6 +1,5 @@
 using Blast.Data;
 using Blast.Interfaces;
-using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -9,21 +8,18 @@ namespace Blast.Game.Shooters
     /// <summary>
     /// Class responsible for the Bullet behaviour.
     /// </summary>
-    public class Bullet : GamePiece, IPoolable<Bullet>
+    public class Bullet : GamePiece
     {
-        public Action<Bullet> OnReturnToPool { get; set; }
-        public ISpawnData data { get; set; }
-
-        private IDamageable _myTarget;
+        private IHitable _myTarget;
         private Vector3 _targetPosition;
         [SerializeField] float _distanceToHit;
 
-        public async void OnSpawn(ISpawnData spawnData)
+        public override async void OnSpawn(ISpawnData spawnData)
         {
             if (!DataHelper.TryCast(spawnData, out BulletData bulletData))
                 return;
 
-            data = bulletData;
+            Data = bulletData;
 
             _myTarget = bulletData.target;
             _targetPosition = bulletData.targetPosition;
@@ -34,8 +30,6 @@ namespace Blast.Game.Shooters
             _myTarget.Hit(transform.position);
             ReturnToPool();
         }
-
-        public void ReturnToPool() => OnReturnToPool?.Invoke(this);
 
         public override async Task MoveTo(Vector3 targetPosition, float distanceToGoal = 0.01f)
         {

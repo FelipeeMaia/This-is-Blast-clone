@@ -1,4 +1,5 @@
 using Blast.Data;
+using Blast.Pooling;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Blast.Game
     /// <summary>
     /// Blueprint for the movable pieces in the game.
     /// </summary>
-    public abstract class GamePiece : MonoBehaviour
+    public abstract class GamePiece : PooledObject
     {
         [Header("Piece Stats")]
         public ColorData colorData { get; private set; }

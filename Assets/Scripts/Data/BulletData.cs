@@ -8,11 +8,11 @@ namespace Blast.Data
     /// </summary>
     public struct BulletData : ISpawnData
     {
-        public readonly IDamageable target;
+        public readonly IHitable target;
         public readonly Vector3 targetPosition;
         public readonly Vector3 spawnPosition;
 
-        public BulletData(IDamageable target, Vector3 targetPosition, Vector3 spawnPosition)
+        public BulletData(IHitable target, Vector3 targetPosition, Vector3 spawnPosition)
         {
             this.target = target;
             this.targetPosition = targetPosition;

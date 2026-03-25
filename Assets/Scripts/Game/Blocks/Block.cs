@@ -10,16 +10,13 @@ namespace Blast.Game.Blocks
     /// <summary>
     /// Class responsible for the blocks behaviour.
     /// </summary>
-    public class Block : GamePiece, IPoolable<Block>, IDamageable
+    public class Block : GamePiece, IHitable
     {
         [SerializeField] GamePiece _secondCube;
 
         public int healthPoints { get; private set; }
-        public bool isTargetable => (healthPoints > 0 && !_isMoving && !_isTargeted);
         private bool _isTargeted;
-        public ISpawnData data { get; set; }
 
-        public Action<Block> OnReturnToPool { get; set; }
         public Action<Vector3> OnCubeDestroy;
 
         [Header("Punch Effect")]
@@ -47,8 +44,8 @@ namespace Blast.Game.Blocks
 
         private async Task HitBlock(Transform target, Vector3 hitPoint)
         {
-            await target.PunchEffect(hitPoint, _punchStrength, _punchDuration);
-            await target.ShrinkOut(_shrinkDuration);
+            await target.DoPunchEffect(hitPoint, _punchStrength, _punchDuration);
+            await target.DoShrinkOut(_shrinkDuration);
             OnCubeDestroy?.Invoke(target.position);
         }
 
@@ -57,7 +54,9 @@ namespace Blast.Game.Blocks
             _isTargeted = true;
         }
 
-        public void OnSpawn(ISpawnData data)
+        public bool IsTargetable() => (healthPoints > 0 && !_isMoving && !_isTargeted);
+
+        public override void OnSpawn(ISpawnData data)
         {
             if (!DataHelper.TryCast(data, out BlockData blockData))
                 return;
@@ -65,7 +64,7 @@ namespace Blast.Game.Blocks
             healthPoints = blockData.healthPoints;
             SetColor(blockData.colorData);
             transform.position = blockData.worldPosition;
-            this.data = blockData;
+            this.Data = blockData;
             _isTargeted = false;
 
             transform.localScale = Vector3.one;
@@ -78,7 +77,5 @@ namespace Blast.Game.Blocks
                 _secondCube.SetColor(blockData.colorData);
             }
         }
-
-        public void ReturnToPool() => OnReturnToPool?.Invoke(this);
     }
 }

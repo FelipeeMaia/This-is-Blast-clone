@@ -12,7 +12,7 @@ namespace Blast.Game
     /// A blueprint for the grids on the game, deals with organization and spawning from object pools.
     /// </summary>
     /// <typeparam name="T">The class that will be organized in a grid.</typeparam>
-    public abstract class BaseGrid<T> : MonoBehaviour where T : GamePiece, IPoolable<T>
+    public abstract class BaseGrid<T> : MonoBehaviour where T : GamePiece
     {
         [Header("Grid's Stats")]
         [SerializeField] protected int _rows;
@@ -27,9 +27,9 @@ namespace Blast.Game
         [SerializeField] protected Transform _poolParent;
 
         protected T[,] _grid;
-        protected PoolManager _pool;
+        [SerializeField] protected PoolManager _pools;
 
-        protected Action<T> OnSpawn;
+        public Action<PooledObject> OnSpawn;
 
         protected async Task SpawnGrid()
         {
@@ -59,9 +59,9 @@ namespace Blast.Game
             return objectPosition;
         }
 
-        protected void ColapseColumn(T destroyedObject)
+        protected void ColapseColumn(PooledObject destroyedObject)
         {
-            var destroyedData = (IGridData)destroyedObject.data;
+            var destroyedData = (IGridData)destroyedObject.Data;
             int column = (int)destroyedData.gridPosition.x;
 
             for (int row = 0; row < _rows; row++)
@@ -76,7 +76,7 @@ namespace Blast.Game
                     var blockPosition = CalculateGridPosition(column, row);
                     _grid[column, row].MoveTo(blockPosition);
 
-                    var gridData = (IGridData)_grid[column, row].data;
+                    var gridData = (IGridData)_grid[column, row].Data;
                     gridData.gridPosition = new(column, row);
                 }
             }
@@ -85,7 +85,7 @@ namespace Blast.Game
         protected T SpawnObject(int column, int row)
         {
             var newObjectData = CreateRandomSpawnData(column, row);
-            var newObject = _pool.Spawn<T>(newObjectData);
+            var newObject = _pools.Spawn<T>(newObjectData);
 
             OnSpawn?.Invoke(newObject);
             return newObject;
@@ -93,7 +93,15 @@ namespace Blast.Game
 
         protected virtual void Awake()
         {
-            _pool = FindAnyObjectByType<PoolManager>();
+            if (_pools is null)
+            {
+                _pools = FindAnyObjectByType<PoolManager>();
+                if (_pools is null)
+                {
+                    Debug.LogError("Pool Manager not found!");
+                }
+            }
+
             _grid = new T[_columns, _rows];
         }
     }

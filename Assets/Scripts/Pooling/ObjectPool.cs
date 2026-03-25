@@ -9,22 +9,22 @@ namespace Blast.Pooling
     /// Class that reprensents a pool of objects.
     /// </summary>
     /// <typeparam name="T">The Type of object that the pool is made of.</typeparam>
-    public class ObjectPool<T> : IObjectPool where T : MonoBehaviour, IPoolable<T>
+    public class ObjectPool
     {
-        private Queue<T> _availableObjects;
-        private List<T> _spawnedObjects;
+        private Queue<PooledObject> _availableObjects;
+        private List<PooledObject> _spawnedObjects;
 
-        private T _prefab;
+        private PooledObject _prefab;
         private Transform _activeParent;
         private Transform _inactiveParent;
         private int _initialCap;
         private int _objectCount;
 
-        Action<T> _returnAction;
+        Action<PooledObject> _returnAction;
 
-        public T Spawn(ISpawnData spawnData)
+        public PooledObject Spawn(ISpawnData spawnData)
         {
-            T obj = _availableObjects.Count > 0
+            PooledObject obj = _availableObjects.Count > 0
                 ? _availableObjects.Dequeue()
                 : CreateNewObject(addToQueue: false);
 
@@ -41,7 +41,7 @@ namespace Blast.Pooling
             return obj;
         }
 
-        public void Despawn(T obj)
+        public void Despawn(PooledObject obj)
         {
             if (!_spawnedObjects.Contains(obj)) return;
 
@@ -54,9 +54,9 @@ namespace Blast.Pooling
             _availableObjects.Enqueue(obj);
         }
 
-        private T CreateNewObject(bool addToQueue = true)
+        private PooledObject CreateNewObject(bool addToQueue = true)
         {
-            T newObject = GameObject.Instantiate(_prefab);
+            PooledObject newObject = GameObject.Instantiate(_prefab);
             newObject.transform.parent = _inactiveParent;
             newObject.gameObject.SetActive(false);
 
@@ -68,7 +68,7 @@ namespace Blast.Pooling
             return newObject;
         }
 
-        private Transform CreateParent(string prefix, T prefab, Transform parent)
+        private Transform CreateParent(string prefix, PooledObject prefab, Transform parent)
         {
             var newParent = new GameObject($"{prefix} - {prefab.name}s").transform;
             newParent.position = Vector3.zero;
@@ -77,7 +77,7 @@ namespace Blast.Pooling
             return newParent;
         }
 
-        public ObjectPool(T prefab, int spawnCap,Transform parent, Action<T> returnAction = null)
+        public ObjectPool(PooledObject prefab, int spawnCap,Transform parent, Action<PooledObject> returnAction = null)
         {
             _prefab = prefab;
             _initialCap = spawnCap;
@@ -86,8 +86,8 @@ namespace Blast.Pooling
             _activeParent = CreateParent("Active", prefab, parent);
             _inactiveParent = CreateParent("Inactive", prefab, parent);
 
-            _availableObjects = new Queue<T>();
-            _spawnedObjects = new List<T>();
+            _availableObjects = new Queue<PooledObject>();
+            _spawnedObjects = new List<PooledObject>();
             _objectCount = 0;
 
             for (int i = 0; i < _initialCap; i++)

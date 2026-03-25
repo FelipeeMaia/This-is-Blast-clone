@@ -1,5 +1,6 @@
 using Blast.Data;
 using Blast.Interfaces;
+using Blast.Pooling;
 using UnityEngine;
 
 namespace Blast.Game.Shooters
@@ -9,11 +10,6 @@ namespace Blast.Game.Shooters
     /// </summary>
     public class ShooterGrid : BaseGrid<Shooter>
     {
-        [Header("Bullet Pool")]
-        [SerializeField] Bullet _bulletPrefab;
-        [SerializeField] int _bulletCap;
-        [SerializeField] Transform _bulletPoolParent;
-
         protected override ISpawnData CreateRandomSpawnData(int column, int row)
         {
             var randomColor = GetRandomColor();
@@ -24,20 +20,20 @@ namespace Blast.Game.Shooters
             return data;
         }
 
-        private void ListenToShooter(Shooter shooter)
+        private void SetShooterListeners(PooledObject pooledShooter)
         {
-            shooter.OnShoot += bulletData => _pool.Spawn<Bullet>(bulletData);
+            if (pooledShooter is not Shooter shooter) return;
+
+            shooter.OnShoot += bulletData => _pools.Spawn<Bullet>(bulletData);
             shooter.OnActivate += ColapseColumn;
         }
 
         async void Start()
         {
-            OnSpawn += ListenToShooter;
+            OnSpawn += SetShooterListeners;
 
             int poolSize = (_rows + 1) * _columns;
-            await _pool.CreatePool(_prefab, poolSize, _poolParent);
-
-            await _pool.CreatePool(_bulletPrefab, _bulletCap, _bulletPoolParent);
+            await _pools.CreatePool(_prefab, poolSize, _poolParent);
 
             await SpawnGrid();
         }

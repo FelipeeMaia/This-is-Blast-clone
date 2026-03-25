@@ -1,4 +1,5 @@
 using Blast.Interfaces;
+using Blast.Pooling;
 using System;
 using UnityEngine;
 
@@ -47,7 +48,7 @@ namespace Blast.Game.Shooters
 
         public async void SelectShooter(Shooter selectedShooter)
         {
-            var data = (IGridData)selectedShooter.data;
+            var data = (IGridData)selectedShooter.Data;
             if (data.gridPosition.y != 0) return;
 
             int slotFound = -1;
@@ -71,8 +72,10 @@ namespace Blast.Game.Shooters
             selectedShooter.ActivateShooter();
         }
 
-        private void RemoveShooter(Shooter shooterToRemove)
+        private void RemoveShooter(PooledObject pooledShooter)
         {
+            if (pooledShooter is not Shooter shooterToRemove) return;
+
             for (int i = 0; i < _slotsCount; i++)
             {
                 if (_frontShooters[i] == shooterToRemove)

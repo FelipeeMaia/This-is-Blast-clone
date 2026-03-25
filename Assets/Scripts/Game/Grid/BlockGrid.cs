@@ -1,5 +1,8 @@
 using Blast.Data;
+using Blast.Game.Shooters;
 using Blast.Interfaces;
+using Blast.Pooling;
+using System;
 using UnityEngine;
 
 namespace Blast.Game.Blocks
@@ -9,6 +12,8 @@ namespace Blast.Game.Blocks
     /// </summary>
     public class BlockGrid : BaseGrid<Block>
     {
+        [SerializeField] ShooterGrid _shooterGrid;
+
         protected override ISpawnData CreateRandomSpawnData(int column, int row)
         {
             var randomColor = GetRandomColor();
@@ -27,7 +32,7 @@ namespace Blast.Game.Blocks
             {
                 var block = _grid[column, 0];
 
-                if (block.isTargetable/* && block.colorData == shooterColor*/)
+                if (block.IsTargetable()/* && block.colorData == shooterColor*/)
                 {
                     newTarget = _grid[column, 0];
                     break;
@@ -40,10 +45,24 @@ namespace Blast.Game.Blocks
         async void Start()
         {
             int poolSize = _columns * (_rows + 1);
-            await _pool.CreatePool(_prefab, poolSize, _poolParent, ColapseColumn);
+            await _pools.CreatePool(_prefab, poolSize, _poolParent, ColapseColumn);
             await SpawnGrid();
         }
 
-        
+        protected override void Awake()
+        {
+            base.Awake();
+
+            if (_shooterGrid is null)
+                _shooterGrid = FindAnyObjectByType<ShooterGrid>();
+
+            _shooterGrid.OnSpawn += ListenToShooterRequest;
+        }
+
+        private void ListenToShooterRequest(PooledObject pooledShooter)
+        {
+            if (pooledShooter is not Shooter shooter) return;
+            shooter.OnRequestTarget += GetValidTarget;
+        }
     }
 }
